@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Capture</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+          integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+          crossorigin="anonymous"/>
+    <link rel="stylesheet" href="lib/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="lib/jquery-editable-select.min.css" type="text/css">
+    <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+<div id="modal" class="dc-modal" style="display: none; opacity: 0;">
+    <div id="loading" class="dc-modal-content" style="display: none;">
+        <div class="dc-modal-v-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="dc-loading-text dc-modal-text">Please wait...</div>
+        </div>
+    </div>
+    <div id="error" class="dc-modal-content" style="display: none;">
+        <div class="dc-modal-v-center">
+            <i class="fa fa-exclamation-triangle"></i>
+            <span id="error-text" class="dc-modal-text"></span>
+            <div>
+                <button id="closeErrorModal" type="button" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+    <div id="modal-ok" class="dc-modal-content" style="display: none;">
+        <div class="dc-modal-v-center">
+            <i class="fa fa-check-circle"></i>
+            <span class="dc-modal-text">Image successfully stored.</span>
+            <div>
+                <button id="closeOkModal" type="button" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="capture-header">
+    <h1>DOM Capture <span class="version">(1.0.0)</span></h1>
+</div>
+<div class="capture-content">
+    <div class="d-flex">
+        <select id="store-select" placeholder="Favorites">
+        </select>
+        <button id="store" type="button" class="btn btn-success btn-sm"><i class="fa fa-save"></i></button>
+    </div>
+    <textarea class="form-control" id="selector" rows="3" placeholder="Selector"></textarea>
+    <div class="settings-dropdown">
+        <a id="settings-btn" data-toggle="collapse" href="#settings" role="button" aria-expanded="false">
+            Settings <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <div id="settings" class="settings collapse">
+        <div class="settings-content container">
+            <div class="settings-row settings-bg-color d-flex justify-content-between">
+                <div>
+                    Background
+                </div>
+                <div>
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <div class="btn-group">
+                                    <span title="Toggle color picker"
+                                          class="btn btn-sm btn-primary dc-color-input-switcher"
+                                          data-original-title="Switch color picker"><i
+                                            class="fa fa-paint-brush"></i></span>
+                            </div>
+                        </div>
+                        <input id="bgColor" value="" placeholder="default"
+                               class="form-control form-control-sm pre-input-color" type="text">
+                        <div class="input-group-btn">
+                            <div class="btn-group">
+                                    <span title="Empty" class="btn btn-sm btn-danger dc-color-input-clearer"
+                                          data-original-title="Empty Field"><i class="fa fa-times"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-row settings-layout d-flex justify-content-between">
+                <div>
+                    Multi Element Layout
+                </div>
+                <div class="btn-group btn-group-sm" data-toggle="buttons">
+                    <label class="btn btn-primary form-check-label" title="keep">
+                        <input class="form-check-input" type="radio" name="options" id="layout-keep"
+                               autocomplete="off">
+                        <i class="fa fa-expand"></i>
+                    </label>
+                    <label class="btn btn-primary form-check-label" title="vertical">
+                        <input class="form-check-input" type="radio" name="options" id="layout-vertical"
+                               autocomplete="off">
+                        <i class="fa fa-arrows-alt-v"></i>
+                    </label>
+                    <label class="btn btn-primary form-check-label" title="horizontal">
+                        <input class="form-check-input" type="radio" name="options" id="layout-horizontal"
+                               autocomplete="off">
+                        <i class="fa fa-arrows-alt-h"></i>
+                    </label>
+                </div>
+            </div>
+            <div class="settings-row settings-traversal d-flex justify-content-between">
+                <div>
+                    DOM Traversal
+                </div>
+                <div class="btn-group btn-group-sm" data-toggle="buttons">
+                    <label class="btn btn-primary form-check-label" title="document">
+                        <input class="form-check-input" type="radio" name="options" id="traversal-document"
+                               autocomplete="off">
+                        Document
+                    </label>
+                    <label class="btn btn-primary form-check-label" title="user">
+                        <input class="form-check-input" type="radio" name="options" id="traversal-user"
+                               autocomplete="off">
+                        User
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="capture-footer d-flex justify-content-between">
+    <div>
+        <button id="clipboard" type="button" class="btn btn-primary">Copy to Clipboard</button>
+        <button id="file" type="button" class="btn btn-success">Save as Image</button>
+    </div>
+    <button id="help" type="button" class="btn btn-info">
+        <i class="fa fa-question"></i>
+    </button>
+</div>
+<script src="lib/jquery-3.5.1.min.js"></script>
+<script src="lib/jquery-editable-select.min.js"></script>
+<script src="lib/bootstrap.min.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

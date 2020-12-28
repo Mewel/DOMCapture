@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Capture Help</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+          integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+          crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="style-help.css" type="text/css">
+</head>
+<body>
+<div class="help-content">
+    <h1>DOM Capture Help</h1>
+    <p>DOM Capture lets you take screenshots of parts of a webpage. The unique and awesome thing
+        is that you don't have to see the area of the web page you want to capture. It is possible to take a screenshot
+        of the whole website even if only a small part is visible to you.</p>
+    <div class="alert alert-warning" role="alert">
+        <p>Be aware that DOM Capture is more of an expert tool. If your unfamiliar with HTML, CSS or the Developer
+            Console you should check some videos first before using this tool.</p>
+        <div>Here is some help:</div>
+        <ul>
+            <li><a href="https://www.youtube.com/watch?v=wcFnnxfA70g" target="_blank">Chrome Developer Tools Video</a>
+            </li>
+            <li><a href="https://www.youtube.com/watch?v=dcCCOiQ1ZuM" target="_blank">CSS Selectors Video</a></li>
+        </ul>
+    </div>
+    <div>
+        <b>Table of Content</b>
+        <ul>
+            <li><a href="#how">How to use</a></li>
+            <li><a href="#credits">Credits</a></li>
+            <li><a href="#license">License</a></li>
+        </ul>
+    </div>
+
+    <div>
+        <h2 id="how">How to use</h2>
+        <h3>Favorites</h3>
+        <p>Lets you store your favorite settings.</p>
+        <h3>Selector</h3>
+        <p>The selector defines which part of the webpage should be captured. It uses the
+            <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors">CSS selector syntax</a>. It's the
+            same syntax jQuery uses for selecting elements.</p>
+        <div class="alert alert-success" role="alert">
+            <b>Tip:</b> To easily copy a selector just open the <b>Developer Tools</b>. Go to the element you are
+            interested in. Do a <b>right-click -> Copy -> Copy Selector</b>. This copies the selector for this specific
+            element. Paste the result in the DOM Selector and try it out!
+        </div>
+        <p>The easiest selector would be the <b>body</b> selector which copies the whole webpage.</p>
+        <p>If you want to copy multiple elements at once just separate them by comma. For example <b>#content, #footer,
+            ...</b>.</p>
+        <h3>Background</h3>
+        <p>Defines the background color of the resulting canvas. The default value is the background color of the <b>body</b>.
+        </p>
+        <h3>Multi Element Layout</h3>
+        <p>Defines how multiple elements are merged together. There are three options:</p>
+        <ul>
+            <li><b>Keep (default):</b> Keeps the layout of the whole webpage. The resulting canvas will have the same
+                size as the whole body. Elements are put on their original position.
+            </li>
+            <li><b>Vertical:</b> Merges the elements vertically.</li>
+            <li><b>Horizontal:</b> Merges the elements horizontally.</li>
+        </ul>
+        <h3>DOM Traversal</h3>
+        <p>Defines the order in which multiple elements are traversed. There are two options:</p>
+        <ul>
+            <li><b>Document (default):</b> Traverse the DOM in <a
+                    href="https://www.w3.org/TR/selectors-api/#document-order">document order</a>.
+            </li>
+            <li><b>User:</b> Traverse the DOM in the order given by the user. The comma separated list is executed in
+                this order.
+            </li>
+        </ul>
+        <div class="alert alert-warning" role="alert">
+            The DOM Traversal setting is only important if <b>multiple elements</b> are selected (separated by comma)
+            and if
+            the <b>Multi Element Layout</b> setting is set to <b>vertical</b> or <b>horizontal</b>.
+        </div>
+        <div class="alert alert-success" role="alert">
+            <p><b>Example:</b> Open a wikipedia page for example <a
+                    href="https://de.wikipedia.org/wiki/Th%C3%BCringer_Universit%C3%A4ts-_und_Landesbibliothek">this
+                one</a>. As selector use <b>#mw-panel, #content</b> and set the Multi Element Layout to
+                <b>horizontal</b>. Now you can
+                switch between Document and User DOM Traversal to see the difference.</p>
+            <p>On each wikipedia page the <b>#mw-panel</b> div is placed <i>before</i> the <b>#content</b> div, which
+                is kind of unusual. To get the right snapshot you have to use the <b>User</b> DOM Traversal</p>
+        </div>
+        <h2 id="credits">Credits</h2>
+        <p>Developed by <b>Matthias Eichner</b>. DOM Capture is Open Source and can be found on <a
+                href="https://github.com/Mewel/DOMCapture">github</a>. If
+            you have any questions, find any bugs or have any feature request please use github for that.</p>
+        <p>Developed for and dedicated to the wonderful <b>Mai Anh</b>!</p>
+        <h3>Software used</h3>
+        <ul>
+            <li>Customized <a href="https://babeljs.io">babel</a> transpiled version of <a
+                    href="github.com/bubkoo/html-to-image" target="_blank">html-to-image</a></li>
+            <li><a href="https://jquery.com" target="_blank">jQuery</a></li>
+            <li><a href="https://github.com/indrimuska/jquery-editable-select" target="_blank">jQuery Editable
+                Select</a></li>
+            <li><a href="https://getbootstrap.com" target="_blank">Bootstrap</a></li>
+        </ul>
+
+        <h2 id="license">License</h2>
+        <p>Copyright 2021 Matthias Eichner</p>
+        <p>
+            Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+            associated documentation files (the "Software"), to deal in the Software without restriction,
+            including without limitation the rights to use, copy, modify, merge, publish, distribute,
+            sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+            furnished to do so, subject to the following conditions:
+        </p>
+        <p>
+            The above copyright notice and this permission notice shall be included in all copies or substantial
+            portions of the Software.
+        </p>
+        <p>
+            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
+            NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+            NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+            OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+            CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+        </p>
+    </div>
+</div>
+</body>
+</html>
