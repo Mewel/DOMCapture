@@ -11,10 +11,11 @@
 function run() {
     console.log("dom capture contentScript.js loaded");
 
+    const isAbsoluteURL = new RegExp('^(?:[a-z]+:)?//', 'i');
     let defaultBackgroundColor = $("body").css("backgroundColor");
 
     // fix CORS for css loading it from the background script
-    fixCors();
+    fixCssCors();
     // set pixel ratio to 1 ignore the zoom level
     fixPixelRatio();
 
@@ -103,7 +104,7 @@ function run() {
 
     function elementToCanvas(element, data) {
         return fixElement(element, () => {
-            return htmlToImage.toCanvas(element, {
+            return window.htmlToImage.toCanvas(element, {
                 filter: filterContent,
                 backgroundColor: getBackgroundColor(data)
             });
@@ -241,9 +242,13 @@ function run() {
         a.parentNode.removeChild(a);
     }
 
-    function fixCors() {
+    function fixCssCors() {
         $("link[rel='stylesheet']").each((i, link) => {
-            fetchCSSFromExtension($(link).attr("href"))
+            const href = $(link).attr("href");
+            if (!isAbsoluteURL.test(href)) {
+                return; // we don't need to process local css
+            }
+            fetchCSSFromExtension(href)
                 .then(result => {
                     if (result.error) {
                         console.log(result.error);
@@ -259,7 +264,7 @@ function run() {
      * TODO: right now only a pixel ratio of 1 is supported (zooming does not affect the snapshot).
      */
     function fixPixelRatio() {
-        htmlToImage.util.getPixelRatio = () => {
+        window.htmlToImage.util.getPixelRatio = () => {
             return 1;
         };
     }

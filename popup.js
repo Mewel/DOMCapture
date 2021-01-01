@@ -16,21 +16,21 @@ $(document).ready(() => {
     const clipboardButton = $("#clipboard");
     const fileButton = $("#file");
 
-    // select
-    $("#store-select").editableSelect({filter: false});
-    $("#store-select").addClass("form-control form-control-sm");
-    $("#store-select").on("select.editable-select", function (e) {
-        loadSave($(e.target).val());
+    // favorites
+    $("#favorites").editableSelect({filter: false});
+    $("#favorites").addClass("form-control form-control-sm");
+    $("#favorites").on("select.editable-select", function (e) {
+        loadFavorite($(e.target).val());
         saveLast();
     });
-    // save
-    $("#store").on("click", () => {
-        const name = $("#store-select").val();
-        if (!data.save[name]) {
-            addStoreItem(name);
+
+    $("#saveFavorite").on("click", () => {
+        const name = $("#favorites").val();
+        if (!data.favorites[name]) {
+            addFavorite(name);
         }
-        data.save[name] = getData();
-        chrome.storage.sync.set({"domCaptureData": data});
+        data.favorites[name] = getData();
+        save();
     });
 
     // bind buttons
@@ -72,19 +72,28 @@ $(document).ready(() => {
 
     // get data and update ui
     chrome.storage.sync.get("domCaptureData", (result) => {
-        data = (result && result.domCaptureData && Object.keys(result.domCaptureData).length !== 0) ? result.domCaptureData : {
-            last: {},
-            save: {}
-        };
-        console.log(data);
-        // add to store select
-        Object.keys(data.save).forEach(name => {
-            addStoreItem(name);
+        data = result ? result.domCaptureData : null;
+        if(!data || !result.domCaptureData || Object.keys(result.domCaptureData).length === 0) {
+            // initial data for startup
+            data = {
+                last: {
+                    selector: "body"
+                },
+                favorites: {
+                    "body": {
+                        selector: "body"
+                    }
+                }
+            }
+        }
+        // add to favorites
+        Object.keys(data.favorites).forEach(name => {
+            addFavorite(name);
         });
         // update ui
         loadData(data.last);
         if (data.last.name) {
-            $("#store-select").val(data.last.name);
+            $("#favorites").val(data.last.name);
         }
     });
 
@@ -128,24 +137,28 @@ $(document).ready(() => {
         $("#traversal-" + (data.traversal ? data.traversal : "document")).attr("checked", "checked").parent().addClass("active");
     }
 
-    function loadSave(name) {
-        if (name && data.save[name]) {
-            $("#store-select").val(name);
-            loadData(data.save[name]);
+    function loadFavorite(name) {
+        if (name && data.favorites[name]) {
+            $("#favorites").val(name);
+            loadData(data.favorites[name]);
         }
     }
 
     function saveLast() {
         data.last = getData();
-        const name = $("#store-select").val();
+        const name = $("#favorites").val();
         if (name) {
             data.last.name = name;
         }
+        save();
+    }
+
+    function save() {
         chrome.storage.sync.set({"domCaptureData": data});
     }
 
     function clearUI() {
-        $("#store-select").val("");
+        $("#favorites").val("");
         $("#selector").val("");
         $("#bgColor").val("");
         $(".dc-color-input-switcher").parent().parent().next().attr("type", "text");
@@ -153,9 +166,9 @@ $(document).ready(() => {
         $("#layout-keep").parent().addClass("active");
     }
 
-    function addStoreItem(name) {
-        const storeSelect = $("#store-select");
-        storeSelect.editableSelect("add", name, 0);
+    function addFavorite(name) {
+        const favorites = $("#favorites");
+        favorites.editableSelect("add", name, 0);
         const li = $(".es-list li:first");
         li.addClass("d-flex justify-content-between");
         li.on("mouseenter", (e) => {
@@ -163,9 +176,9 @@ $(document).ready(() => {
             $(e.target).find("i").on("mousedown", () => {
                 if (confirm("Delete '" + name + "'?")) {
                     const index = [...e.target.parentElement.children].indexOf(e.target);
-                    storeSelect.editableSelect("remove", index);
-                    delete data.save[name];
-                    chrome.storage.sync.set({"domCaptureData": data});
+                    favorites.editableSelect("remove", index);
+                    delete data.favorites[name];
+                    save();
                     clearUI();
                 }
             });
